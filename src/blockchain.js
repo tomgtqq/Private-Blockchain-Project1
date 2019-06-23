@@ -79,7 +79,7 @@ class Blockchain {
             }
             block.hash = SHA256(JSON.stringify(block)).toString();
             self.chain.push(block);
-            resolve(self.chain);
+            resolve(block);
            }
            catch(err){
             console.error(err);
@@ -190,7 +190,7 @@ class Blockchain {
                     let data = JSON.parse(result);
                     if(data.owner === String(address)){
                         data.star.story = hex2ascii(data.star.story);
-                        stars.push(data.star);
+                        stars.push(data);
                     }
                 });
                 resolve(stars);
@@ -205,17 +205,8 @@ class Blockchain {
     validateBlock(height) {
         let self = this ;
         return new Promise(function(resolve, reject){
-            let block = self.getBlockByHeight(height);      
-            // Retrieve hash from block
-            const blockHash = block.hash;
-            // Generate Hash by SHA256 
-            block.hash = null; // Hash the block again. @cool
-            block.hash = SHA256(JSON.stringify(block)).toString();
-            if(blockHash === block.hash){
-                resolve(true);
-            } else {
-                resolve(false);
-            }
+            const block = self.getBlockByHeight(height);  
+            resolve(block.validate());
         });
     }
     /**

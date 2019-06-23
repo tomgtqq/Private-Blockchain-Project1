@@ -40,11 +40,11 @@ class Block {
     validate() {
         let self = this;
         return new Promise((resolve, reject) => {
-            const blockHash = self.hash;                    
+            const originalHashValue = self.hash;                    
             self.hash = null;
-            const validBlockHash = SHA256(JSON.stringify(self)).toString();
-
-            if(blockHash === validBlockHash){
+            const validHashValue = SHA256(JSON.stringify(self)).toString();
+            self.hash = originalHashValue ;
+            if(originalHashValue === validHashValue){
                 resolve(true);
             } else {
                 resolve(false);
